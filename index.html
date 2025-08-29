@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>WebAR Demo</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.2.1/aframe/build/aframe-ar.js"></script>
+    <style>
+      body { margin:0; overflow:hidden; }
+      #overlay {
+        position: fixed; top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: black; color: white;
+        display: flex;
+        align-items: center; justify-content: center;
+        font-family: sans-serif;
+        z-index: 999;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="overlay">Tap to start AR</div>
+
+    <a-scene
+      embedded
+      vr-mode-ui="enabled: false"
+      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+      renderer="logarithmicDepthBuffer: true;"
+      playsinline
+    >
+      <a-assets>
+        <a-asset-item id="mymodel" src="./model.gltf"></a-asset-item>
+        <audio id="clickSound" src="./click.wav"></audio>
+      </a-assets>
+
+      <a-marker type="pattern" url="./pattern-hiro.patt">
+        <a-entity gltf-model="#mymodel" scale="0.5 0.5 0.5" position="0 0 0"></a-entity>
+      </a-marker>
+
+      <a-entity camera></a-entity>
+    </a-scene>
+
+    <script>
+      const overlay = document.getElementById('overlay');
+      overlay.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        document.getElementById('clickSound').play().catch(console.warn);
+      });
+    </script>
+  </body>
+</html>
